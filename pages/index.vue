@@ -9,8 +9,10 @@ const route = useRoute();
       {{ locale.name }}
     </button>
   </div>
-  <h1>{{ $t('welcome') }}</h1>
-  <p>{{ $t('description') }}</p>
+  <h1>{{ $t('Home.tutorial') }}</h1>
+  <p>{{ $t('Home.dragAndDrop') }}</p>
+  <!-- <p v-html="$t('Home.dragAndDrop')"></p> -->
+
   <p>{{ route.path }}</p>
 </template>
 
