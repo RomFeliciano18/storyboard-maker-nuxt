@@ -3,7 +3,7 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-05-15',
   devtools: { enabled: true },
   modules: ['@nuxt/image', '@nuxtjs/i18n'],
-  css: ['~/assets/css/main.css'],
+  css: ['~/assets/css/main.css', 'remixicon/fonts/remixicon.css'],
   postcss: {
     plugins: {
       tailwindcss: {},
@@ -11,9 +11,9 @@ export default defineNuxtConfig({
     },
   },
   i18n: {
-    strategy: 'prefix', 
+    strategy: 'prefix',
     defaultLocale: 'us',
-    detectBrowserLanguage: false, 
+    detectBrowserLanguage: false,
     locales: [
       {
         code: 'us',
@@ -34,6 +34,6 @@ export default defineNuxtConfig({
         file: 'fr.json',
       },
     ],
-    lazy: true, 
+    lazy: true,
   },
 });
