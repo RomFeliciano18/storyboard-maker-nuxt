@@ -2,7 +2,7 @@
 export default defineNuxtConfig({
   compatibilityDate: '2025-05-15',
   devtools: { enabled: true },
-  modules: ['@nuxt/image', '@nuxtjs/i18n'],
+  modules: ['@nuxt/image', '@nuxtjs/i18n', '@vueuse/nuxt'],
   css: ['~/assets/css/main.css', 'remixicon/fonts/remixicon.css'],
   postcss: {
     plugins: {
@@ -24,13 +24,13 @@ export default defineNuxtConfig({
       {
         code: 'en',
         iso: 'en-GB',
-        name: 'English',
+        name: 'Canada-EN',
         file: 'en.json',
       },
       {
         code: 'fr',
         iso: 'fr-FR',
-        name: 'Français',
+        name: 'Canada-FR',
         file: 'fr.json',
       },
     ],
