@@ -4,6 +4,10 @@ const route = useRoute();
 </script>
 
 <template>
+  <div class="container-padding bg-zinc-100">
+    <Cart />
+  </div>
+
   <div class="flex items-center gap-2">
     <button v-for="locale in locales" @click="setLocale(locale.code)" class="rounded bg-yellow-500 px-4 py-2 text-black">
       {{ locale.name }}

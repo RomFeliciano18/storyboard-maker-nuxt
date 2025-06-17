@@ -35,5 +35,8 @@ export default defineNuxtConfig({
       },
     ],
     lazy: true,
+    bundle: {
+      optimizeTranslationDirective: false,
+    },
   },
 });

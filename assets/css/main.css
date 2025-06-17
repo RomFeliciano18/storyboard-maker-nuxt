@@ -22,9 +22,10 @@
   font-family: MontserratLight;
 }
 
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: MontserratMedium;
+* {
+  font-family: MontserratMedium;
+}
+
+.container-padding{
+  @apply 3xl:px-96 px-4 xl:px-80
 }

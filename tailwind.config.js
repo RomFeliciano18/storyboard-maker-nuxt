@@ -13,6 +13,9 @@ module.exports = {
       colors: {
         primary: '#f1b24f',
       },
+      screens: {
+        '3xl': '2560px',
+      },
     },
   },
   plugins: [],

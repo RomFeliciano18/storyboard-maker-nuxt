@@ -25,3 +25,5 @@ logs
 
 public/.well-known
 .prettierrc
+
+sample.vue
