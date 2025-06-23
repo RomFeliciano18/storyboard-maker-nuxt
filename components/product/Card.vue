@@ -3,9 +3,9 @@ defineProps(['product']);
 </script>
 
 <template>
-  <div class="mb-2 flex flex-col rounded shadow-lg">
-    <div class="rounded-t bg-red-500 p-2 lg:max-h-[230px] lg:min-h-[230px] lg:min-w-[290px] lg:max-w-[290px]">
-      <NuxtImg src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSFUAfyVe3Easiycyh3isP9wDQTYuSmGPsPQvLIJdEYvQ_DsFq5Ez2Nh_QjiS3oZ3B8ZPfK9cZQyIStmQMV1lDPLw" alt="" class="h-full w-full object-contain py-5" />
+  <div class="mb-2 flex flex-col rounded border border-neutral-200 shadow-lg">
+    <div class="rounded-t bg-white p-2 lg:max-h-[230px] lg:min-h-[230px] lg:min-w-[290px] lg:max-w-[290px]">
+      <NuxtImg :src="`/thumbnails/${product.colors[0].display}`" alt="" class="h-full w-full scale-110 object-contain p-5" />
     </div>
     <div class="p-2">
       <h3>{{ product.productCode }}</h3>
