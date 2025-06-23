@@ -1,5 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  // ssr: false,
   compatibilityDate: '2025-05-15',
   devtools: { enabled: true },
   modules: ['@nuxt/image', '@nuxtjs/i18n', '@vueuse/nuxt'],
@@ -39,4 +40,10 @@ export default defineNuxtConfig({
       optimizeTranslationDirective: false,
     },
   },
+  runtimeConfig:{
+     public: {
+      apiDev: process.env.NUXT_PUBLIC_API_DEV,
+      apiProd: process.env.NUXT_PUBLIC_API_PROD
+    }
+  }
 });

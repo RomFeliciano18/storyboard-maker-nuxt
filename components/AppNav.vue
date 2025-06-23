@@ -1,22 +1,28 @@
-<script setup></script>
+<script setup>
+const { locale } = useI18n();
+</script>
 
 <template>
   <header class="relative flex items-center justify-center lg:justify-start">
     <NuxtImg src="/logo.png" alt="logo" class="w-96 px-10 py-4 lg:py-0" />
     <nav class="hidden w-full grid-cols-3 bg-black px-10 text-neutral-400 lg:grid">
-      <div class="flex items-center text-primary">
-        <span class="montserrat-bold text-[8rem]">1</span>
-        <span class="w-36 text-2xl uppercase">
-          {{ $t('Home.selectProductsProg') }}
-        </span>
+      <div>
+        <NuxtLink :to="`/${locale}`" class="flex w-48 items-center text-primary">
+          <span class="montserrat-bold text-[8rem]">1</span>
+          <span class="w-36 text-2xl uppercase">
+            {{ $t('Home.selectProductsProg') }}
+          </span>
+        </NuxtLink>
       </div>
-      <div class="flex items-center">
-        <span class="montserrat-bold text-[8rem]">2</span>
-        <span class="w-36 text-2xl uppercase">
-          {{ $t('Home.uploadImageProg') }}
-        </span>
+      <div>
+        <NuxtLink to="/upload-logo" class="flex w-48 items-center">
+          <span class="montserrat-bold text-[8rem]">2</span>
+          <span class="w-36 text-2xl uppercase">
+            {{ $t('Home.uploadImageProg') }}
+          </span>
+        </NuxtLink>
       </div>
-      <div class="flex items-center">
+      <div class="flex w-48 items-center">
         <span class="montserrat-bold text-[8rem]">3</span>
         <span class="w-36 text-2xl uppercase">
           {{ $t('Home.selectLayoutProg') }}
