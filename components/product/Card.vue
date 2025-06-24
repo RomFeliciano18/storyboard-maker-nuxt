@@ -39,7 +39,10 @@ const variant = computed(() => props.product.colors[props.activeIndex]);
         <p class="rounded bg-yellow-500 px-2 py-1 text-sm">New</p>
       </div>
       <div v-if="variant.isSale" class="absolute left-2 top-2 z-10">
-        <p class="rounded bg-yellow-500 px-2 py-1 text-sm">Sale</p>
+        <p class="rounded bg-yellow-500 px-2 py-1 text-sm">
+          Sale
+          <i class="ri-price-tag-3-line"></i>
+        </p>
       </div>
       <button v-if="product.colors.length > 1" @click="prevVariant" class="absolute left-1 top-1/2 z-10 -translate-y-1/2"><i class="ri-arrow-left-circle-line rounded-full bg-white text-4xl transition-colors hover:text-yellow-500"></i></button>
       <div
