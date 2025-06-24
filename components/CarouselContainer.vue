@@ -25,16 +25,16 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="relative w-full">
+  <div class="relative w-full rounded">
     <div ref="scrollContainer" class="flex max-w-full gap-4 overflow-x-scroll scroll-smooth">
       <slot />
     </div>
 
-    <button v-if="showLeft" @click="scrollLeft" class="absolute left-0 top-1/2 z-10 h-full w-12 -translate-y-1/2 rounded-e-lg bg-neutral-500 bg-opacity-70 p-2 shadow transition-all hover:bg-opacity-90">
+    <button v-if="showLeft" @click="scrollLeft" class="absolute left-0 top-1/2 z-10 h-full w-12 -translate-y-1/2 rounded-s bg-neutral-500 bg-opacity-70 p-2 shadow transition-all hover:bg-opacity-90">
       <i class="ri-arrow-left-s-line text-3xl text-white"></i>
     </button>
 
-    <button v-if="showRight" @click="scrollRight" class="absolute right-0 top-1/2 z-10 h-full w-12 -translate-y-1/2 rounded-s-lg bg-neutral-500 bg-opacity-70 p-2 shadow transition-all hover:bg-opacity-90">
+    <button v-if="showRight" @click="scrollRight" class="absolute right-0 top-1/2 z-10 h-full w-12 -translate-y-1/2 rounded-e bg-neutral-500 bg-opacity-70 p-2 shadow transition-all hover:bg-opacity-90">
       <i class="ri-arrow-right-s-line text-3xl text-white"></i>
     </button>
   </div>
