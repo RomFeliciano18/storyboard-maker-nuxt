@@ -1,4 +1,15 @@
 <script setup>
+const categories = [
+  { key: 'notebook', name: 'Books' },
+  { key: 'bottle', name: 'Bottles' },
+  { key: 'bag', name: 'Bags' },
+  { key: 'pen', name: 'Pens' },
+  { key: 'home', name: 'Home' },
+  { key: 'travel', name: 'Travel' },
+  { key: 'packaging', name: 'Packaging' },
+  { key: 'giftset', name: 'Giftset' },
+];
+
 const { data: dataProds, status } = useProducts();
 const { data: dataFeatured } = useFeaturedProducts();
 
@@ -35,12 +46,6 @@ const groupedProducts = computed(() => {
   return categoryMap;
 });
 
-const categoryKeys = computed(() => {
-  return Array.from(groupedProducts.value.keys()).sort((a, b) => a.localeCompare(b));
-});
-
-console.log(categoryKeys.value);
-
 useHead({
   title: 'Products | StoryBoard',
 });
@@ -61,10 +66,7 @@ useHead({
 
       <div class="container-padding">
         <ProductContainer :products="featuredProducts" :category="dataFeatured?.features[0].name" />
-        <ProductContainer :products="groupedProducts.get('bag')" category="Bags" />
-      </div>
-      <div v-for="product in dataProds?.products" :key="product.productCode">
-        {{ product.name }}
+        <ProductContainer v-for="category in categories" :products="groupedProducts.get(category.key)" :category="category.name" />
       </div>
     </template>
   </div>

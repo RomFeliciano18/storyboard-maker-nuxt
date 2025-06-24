@@ -8,10 +8,10 @@ const viewAll = ref(false);
   <div class="py-4">
     <div class="flex items-center justify-between py-4">
       <div class="flex items-center gap-4">
-        <h1 class="montserrat-bold text-7xl text-yellow-500">{{ category }}</h1>
+        <h1 class="montserrat-bold text-6xl text-yellow-500">{{ category }}</h1>
         <span class="text-lg font-semibold">({{ products?.length }} results)</span>
       </div>
-      <MainButton v-if="products.length > 10" @click="viewAll = !viewAll" class="w-28">{{ viewAll ? 'Show Less' : 'Show More' }}</MainButton>
+      <MainButton v-if="products?.length > 20" @click="viewAll = !viewAll" class="w-28">{{ viewAll ? 'Show Less' : 'Show More' }}</MainButton>
     </div>
     <CarouselContainer v-if="!viewAll">
       <ProductCard v-for="product in products" :product="product" :viewAll="viewAll" />
