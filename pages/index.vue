@@ -12,7 +12,10 @@ const featuredProducts = computed(() => {
   <div class="sticky top-0">
     <Cart />
     <AppFilter />
-    <h1 v-if="status === 'pending'">LOADING...</h1>
+    <div v-if="status === 'pending'" class="flex h-96 flex-col items-center justify-center">
+      <Spinner />
+      <h1 class="text-3xl font-bold text-yellow-500">Loading...</h1>
+    </div>
     <template v-if="status === 'success'">
       <div class="container-padding">
         <ProductContainer :products="featuredProducts" :category="dataFeatured?.features[0].name" />
