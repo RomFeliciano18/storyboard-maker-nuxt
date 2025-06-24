@@ -1,6 +1,7 @@
 <script setup>
-const props = defineProps(['product', 'viewAll']);
-const activeIndex = ref(0);
+const props = defineProps(['product', 'viewAll', 'activeIndex']);
+const emit = defineEmits(['update:activeIndex']);
+
 const isSliding = ref(false);
 const direction = ref('');
 
@@ -8,7 +9,7 @@ const nextVariant = () => {
   if (isSliding.value) return;
   direction.value = 'left';
   isSliding.value = true;
-  activeIndex.value = (activeIndex.value + 1) % props.product.colors.length;
+  emit('update:activeIndex', (props.activeIndex + 1) % props.product.colors.length);
   setTimeout(() => (isSliding.value = false), 300);
 };
 
@@ -16,24 +17,30 @@ const prevVariant = () => {
   if (isSliding.value) return;
   direction.value = 'right';
   isSliding.value = true;
-  activeIndex.value = (activeIndex.value - 1 + props.product.colors.length) % props.product.colors.length;
+  emit('update:activeIndex', (props.activeIndex - 1 + props.product.colors.length) % props.product.colors.length);
   setTimeout(() => (isSliding.value = false), 300);
 };
 
 const setVariant = (index) => {
-  if (isSliding.value || index === activeIndex.value) return;
-  direction.value = index > activeIndex.value ? 'left' : 'right';
+  if (isSliding.value || index === props.activeIndex) return;
+  direction.value = index > props.activeIndex ? 'left' : 'right';
   isSliding.value = true;
-  activeIndex.value = index;
+  emit('update:activeIndex', index);
   setTimeout(() => (isSliding.value = false), 300);
 };
 
-const variant = computed(() => props.product.colors[activeIndex.value]);
+const variant = computed(() => props.product.colors[props.activeIndex]);
 </script>
 
 <template>
   <div class="mb-2 flex flex-col rounded border border-neutral-200 shadow-lg">
     <div class="relative h-full overflow-hidden rounded-t bg-white p-2">
+      <div v-if="product.isNew" class="absolute left-2 top-2 z-10">
+        <p class="rounded bg-yellow-500 px-2 py-1 text-sm">New</p>
+      </div>
+      <div v-if="variant.isSale" class="absolute left-2 top-2 z-10">
+        <p class="rounded bg-yellow-500 px-2 py-1 text-sm">Sale</p>
+      </div>
       <button v-if="product.colors.length > 1" @click="prevVariant" class="absolute left-1 top-1/2 z-10 -translate-y-1/2"><i class="ri-arrow-left-circle-line rounded-full bg-white text-4xl transition-colors hover:text-yellow-500"></i></button>
       <div
         class="flex h-auto min-h-full w-full items-center justify-center p-4 transition-transform duration-300 ease-in-out"
