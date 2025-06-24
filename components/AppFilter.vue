@@ -54,8 +54,8 @@ watch(selectedLocale, (newLocale) => {
 </script>
 
 <template>
-  <div class="container-padding flex h-20 items-center justify-between space-y-2 bg-black p-2">
-    <div class="flex items-center gap-2">
+  <div class="container-padding flex flex-wrap items-center justify-between space-y-2 bg-black p-2 md:h-20">
+    <div class="flex flex-wrap items-center gap-2">
       <form @submit.prevent="handleSearch" class="relative">
         <input type="text" v-model="filter.search" placeholder="Blue bottles under $20" class="w-72 rounded p-2 pr-12 placeholder:uppercase focus:outline-none" />
         <MainButton class="absolute right-0 top-1/2 h-10 !w-10 -translate-y-1/2 border-none">

@@ -59,7 +59,7 @@ useHead({
     </div>
 
     <template v-if="status === 'success'">
-      <div class="sticky top-0 z-50">
+      <div class="top-0 z-50 sm:sticky">
         <Cart />
         <AppFilter />
       </div>
