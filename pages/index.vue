@@ -1,21 +1,30 @@
 <script setup>
+const { locale, t } = useI18n();
+
 const categories = [
-  { key: 'notebook', name: 'Books' },
-  { key: 'bottle', name: 'Bottles' },
-  { key: 'bag', name: 'Bags' },
-  { key: 'pen', name: 'Pens' },
-  { key: 'home', name: 'Home' },
-  { key: 'travel', name: 'Travel' },
-  { key: 'packaging', name: 'Packaging' },
-  { key: 'giftset', name: 'Giftset' },
+  { key: 'notebook', name: t('Home.books') },
+  { key: 'bottle', name: t('Home.bottles') },
+  { key: 'bag', name: t('Home.bags') },
+  { key: 'pen', name: t('Home.pens') },
+  { key: 'home', name: t('Home.home') },
+  { key: 'travel', name: t('Home.travel') },
+  { key: 'packaging', name: t('Home.packaging') },
+  { key: 'giftset', name: t('Home.giftset') },
 ];
 
 const { data: dataProds, status } = useProducts();
 const { data: dataFeatured } = useFeaturedProducts();
 
 const featuredProducts = computed(() => {
-  const featuredCode = dataFeatured.value?.features[0].products.map(({ productCode }) => productCode);
-  return dataProds.value?.products.filter((prod) => featuredCode.includes(prod.productCode));
+  const featuredList = dataFeatured.value?.features[0]?.products || [];
+  const featuredCode = featuredList.map(({ productCode }) => productCode);
+  const productMap = new Map((dataProds.value?.products || []).map((prod) => [prod.productCode, prod]));
+
+  return featuredCode.map((code) => productMap.get(code)).filter(Boolean);
+});
+
+const featuredTitle = computed(() => {
+  return locale.value == 'fr' ? dataFeatured.value?.features[0].nameFR : dataFeatured.value?.features[0].name;
 });
 
 const groupedProducts = computed(() => {
@@ -55,7 +64,6 @@ useHead({
   <div class="relative">
     <div v-if="status === 'pending'" class="flex h-96 flex-col items-center justify-center">
       <Spinner />
-      <h1 class="text-3xl font-bold text-yellow-500">Loading...</h1>
     </div>
 
     <template v-if="status === 'success'">
@@ -65,8 +73,10 @@ useHead({
       </div>
 
       <div class="container-padding">
-        <ProductContainer :products="featuredProducts" :category="dataFeatured?.features[0].name" />
-        <ProductContainer v-for="category in categories" :products="groupedProducts.get(category.key)" :category="category.name" />
+        <ProductContainer :products="featuredProducts" :category="featuredTitle" />
+        <template v-for="category in categories">
+          <ProductContainer v-if="groupedProducts.get(category.key).length > 1" :key="category.key" :products="groupedProducts.get(category.key)" :category="category.name" />
+        </template>
       </div>
     </template>
   </div>

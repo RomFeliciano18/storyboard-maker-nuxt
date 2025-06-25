@@ -78,9 +78,9 @@ const variant = computed(() => props.product.colors[props.activeIndex]);
         <span>{{ product.productCode }}</span>
         <span class="truncate">{{ product.name }}</span>
       </div>
-      <p class="text-sm">As Low As: ${{ variant.price.toFixed(2) }}</p>
-      <p class="text-sm">MOQ: {{ variant.MOQ }}</p>
-      <p class="text-sm">Stock: {{ variant.qty.toLocaleString() }} {{ variant.displayColor }}</p>
+      <p class="text-sm">{{ $t('Home.aslowas') }}: ${{ variant.price.toFixed(2) }}</p>
+      <p class="text-sm">{{ $t('Home.moq') }}: {{ variant.MOQ }}</p>
+      <p class="text-sm">{{ $t('Home.stock') }}: {{ variant.qty.toLocaleString() }} {{ variant.displayColor }}</p>
       <MainButton class="w-full hover:scale-100">{{ $t('Home.add') }}</MainButton>
     </div>
   </div>

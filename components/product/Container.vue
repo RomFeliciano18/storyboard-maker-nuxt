@@ -26,7 +26,7 @@ const updateVariant = (code, index) => {
     <div class="flex flex-wrap items-center justify-between py-4">
       <div class="flex items-center gap-4">
         <h1 class="montserrat-bold text-4xl text-yellow-500 sm:text-6xl">{{ category }}</h1>
-        <span class="text-lg font-semibold">({{ products?.length }} results)</span>
+        <span class="text-lg font-semibold">({{ products?.length }} {{ $t('Home.results') }})</span>
       </div>
       <MainButton v-if="products?.length > 20" @click="viewAll = !viewAll" class="w-28">
         {{ viewAll ? 'Show Less' : 'Show More' }}

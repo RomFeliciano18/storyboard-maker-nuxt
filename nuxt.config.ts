@@ -43,7 +43,9 @@ export default defineNuxtConfig({
   runtimeConfig:{
      public: {
       apiDev: process.env.NUXT_PUBLIC_API_DEV,
-      apiProd: process.env.NUXT_PUBLIC_API_PROD
+      apiProd: process.env.NUXT_PUBLIC_API_PROD,
+      apiFeatDev: process.env.NUXT_PUBLIC_API_FEAT_DEV,
+      apiFeatProd: process.env.NUXT_PUBLIC_API_FEAT_PROD
     }
   }
 });
