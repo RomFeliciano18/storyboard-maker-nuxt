@@ -1,5 +1,8 @@
 <script setup>
-const cart = ref(new Array(15));
+const cart = useCart();
+const cartSlots = computed(() => {
+  return Array.from({ length: 15 }, (_, index) => cart.products[index] || null);
+});
 </script>
 
 <template>
@@ -7,7 +10,7 @@ const cart = ref(new Array(15));
     <h2 class="text-2xl">{{ $t('Home.selectProd') }}</h2>
     <div class="grid grid-cols-12 gap-2 lg:gap-2">
       <CarouselContainer class="col-span-12 lg:col-span-10">
-        <CartItem v-for="crt in cart" :key="crt" :data="false" />
+        <CartItem v-for="(crt, index) in cartSlots" :key="index" :data="crt" :index="index" />
       </CarouselContainer>
 
       <div class="col-span-12 flex flex-row items-center justify-start gap-2 lg:col-span-2 lg:flex-col lg:items-end lg:py-2">

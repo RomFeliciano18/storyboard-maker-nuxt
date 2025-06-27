@@ -52,9 +52,10 @@ const variant = computed(() => props.product.colors[props.activeIndex]);
         :class="{
           'slide-left': isSliding && direction === 'left',
           'slide-right': isSliding && direction === 'right',
+          'min-h-72': product.type === 'pen',
         }"
       >
-        <NuxtImg :src="`/thumbnails/${variant.display}`" :alt="product.productCode" class="w-40" />
+        <NuxtImg :src="`/thumbnails/${variant.display}`" :alt="`${product.productCode}-${variant.displayColor}`" class="w-40" />
       </div>
       <button v-if="product.colors.length > 1" @click="nextVariant" class="absolute right-1 top-1/2 z-10 -translate-y-1/2"><i class="ri-arrow-right-circle-line rounded-full bg-white text-4xl transition-colors hover:text-yellow-500"></i></button>
 
@@ -82,7 +83,7 @@ const variant = computed(() => props.product.colors[props.activeIndex]);
       <p class="text-sm">{{ $t('Home.aslowas') }}: ${{ variant.price.toFixed(2) }}</p>
       <p class="text-sm">{{ $t('Home.moq') }}: {{ variant.MOQ }}</p>
       <p class="text-sm">{{ $t('Home.stock') }}: {{ variant.qty.toLocaleString() }} {{ variant.displayColor }}</p>
-      <MainButton @click="cart.add(product)" class="w-full hover:scale-100">{{ $t('Home.add') }}</MainButton>
+      <MainButton @click="cart.add(product, activeIndex)" class="w-full hover:scale-100">{{ $t('Home.add') }}</MainButton>
     </div>
   </div>
 </template>
