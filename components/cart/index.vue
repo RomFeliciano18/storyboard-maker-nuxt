@@ -12,10 +12,10 @@ const cart = ref(new Array(15));
 
       <div class="col-span-12 flex flex-row items-center justify-start gap-2 lg:col-span-2 lg:flex-col lg:items-end lg:py-2">
         <MainButton class="w-full lg:h-full lg:w-44">
-          <span>Next</span>
+          <span>{{ $t('Home.next') }}</span>
           <i class="ri-arrow-right-circle-line lg:text-xl"></i>
         </MainButton>
-        <MainButton variant="secondary" class="w-full lg:w-44">Clear Selection</MainButton>
+        <MainButton variant="secondary" class="w-full lg:w-44">{{ $t('Home.clearSelection') }}</MainButton>
       </div>
     </div>
   </div>

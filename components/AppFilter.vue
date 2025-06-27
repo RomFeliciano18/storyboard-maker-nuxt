@@ -57,20 +57,20 @@ watch(selectedLocale, (newLocale) => {
   <div class="container-padding flex flex-wrap items-center justify-between space-y-2 bg-black p-2 md:h-20">
     <div class="flex flex-wrap items-center gap-2">
       <form @submit.prevent="handleSearch" class="relative">
-        <input type="text" v-model="filter.search" placeholder="Blue bottles under $20" class="w-72 rounded p-2 pr-12 placeholder:uppercase focus:outline-none" />
+        <input type="text" v-model="filter.search" :placeholder="$t('Home.blueBottles')" class="w-96 rounded p-2 pr-12 placeholder:uppercase focus:outline-none" />
         <MainButton class="absolute right-0 top-1/2 h-10 !w-10 -translate-y-1/2 border-none">
           <i class="ri-search-line text-xl"></i>
         </MainButton>
       </form>
       <MainButton variant="secondary" @click="copy($route.fullPath)" class="h-10 !w-10 border-none"><i class="ri-link text-xl"></i></MainButton>
 
-      <label class="ml-4 text-white">Categories:</label>
+      <label class="ml-4 text-white">{{ $t('Home.filters') }}:</label>
       <select v-model="filter.category">
-        <option value="all">All</option>
+        <option value="all">{{ $t('Home.categories') }}</option>
         <option value="pens">Pens</option>
       </select>
 
-      <MainButton @click="handleReset">Reset</MainButton>
+      <MainButton @click="handleReset" class="w-auto">{{ $t('Home.resetFilter') }}</MainButton>
     </div>
 
     <select v-model="selectedLocale">

@@ -1,5 +1,6 @@
 <script setup>
 const props = defineProps(['product', 'viewAll', 'activeIndex']);
+const cart = useCart();
 const emit = defineEmits(['update:activeIndex']);
 
 const isSliding = ref(false);
@@ -11,6 +12,7 @@ const nextVariant = () => {
   isSliding.value = true;
   emit('update:activeIndex', (props.activeIndex + 1) % props.product.colors.length);
   setTimeout(() => (isSliding.value = false), 300);
+  console.log(cart.products);
 };
 
 const prevVariant = () => {
@@ -52,8 +54,7 @@ const variant = computed(() => props.product.colors[props.activeIndex]);
           'slide-right': isSliding && direction === 'right',
         }"
       >
-        <NuxtImg v-if="variant.qty" :src="`/thumbnails/${variant.display}`" alt="" class="w-40" />
-        <NuxtImg v-else src="https://media.istockphoto.com/id/1305876461/vector/sorry-temporarily-out-of-stock-sign.jpg?s=612x612&w=0&k=20&c=gXtMjuh6kHPRQaOnPTroS6M7oCpC35VAfYVFQMMQmds=" alt="" class="h-full w-full object-contain" />
+        <NuxtImg :src="`/thumbnails/${variant.display}`" :alt="product.productCode" class="w-40" />
       </div>
       <button v-if="product.colors.length > 1" @click="nextVariant" class="absolute right-1 top-1/2 z-10 -translate-y-1/2"><i class="ri-arrow-right-circle-line rounded-full bg-white text-4xl transition-colors hover:text-yellow-500"></i></button>
 
@@ -76,12 +77,12 @@ const variant = computed(() => props.product.colors[props.activeIndex]);
       <h3 :class="['truncate font-bold 3xl:w-80', !viewAll && 'w-72']">{{ product.summary }}</h3>
       <div :class="['flex gap-2 font-semibold uppercase 3xl:w-80', !viewAll && 'w-72']">
         <span>{{ product.productCode }}</span>
-        <span class="truncate">{{ product.name }}</span>
+        <span class="truncate" v-html="product.name"></span>
       </div>
       <p class="text-sm">{{ $t('Home.aslowas') }}: ${{ variant.price.toFixed(2) }}</p>
       <p class="text-sm">{{ $t('Home.moq') }}: {{ variant.MOQ }}</p>
       <p class="text-sm">{{ $t('Home.stock') }}: {{ variant.qty.toLocaleString() }} {{ variant.displayColor }}</p>
-      <MainButton class="w-full hover:scale-100">{{ $t('Home.add') }}</MainButton>
+      <MainButton @click="cart.add(product)" class="w-full hover:scale-100">{{ $t('Home.add') }}</MainButton>
     </div>
   </div>
 </template>

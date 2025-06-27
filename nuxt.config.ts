@@ -3,7 +3,7 @@ export default defineNuxtConfig({
   // ssr: false,
   compatibilityDate: '2025-05-15',
   devtools: { enabled: true },
-  modules: ['@nuxt/image', '@nuxtjs/i18n', '@vueuse/nuxt'],
+  modules: ['@pinia/nuxt', '@nuxt/image', '@nuxtjs/i18n', '@vueuse/nuxt'],
   css: ['~/assets/css/main.css', 'remixicon/fonts/remixicon.css'],
   postcss: {
     plugins: {
@@ -40,12 +40,12 @@ export default defineNuxtConfig({
       optimizeTranslationDirective: false,
     },
   },
-  runtimeConfig:{
-     public: {
+  runtimeConfig: {
+    public: {
       apiDev: process.env.NUXT_PUBLIC_API_DEV,
       apiProd: process.env.NUXT_PUBLIC_API_PROD,
       apiFeatDev: process.env.NUXT_PUBLIC_API_FEAT_DEV,
-      apiFeatProd: process.env.NUXT_PUBLIC_API_FEAT_PROD
-    }
-  }
+      apiFeatProd: process.env.NUXT_PUBLIC_API_FEAT_PROD,
+    },
+  },
 });
