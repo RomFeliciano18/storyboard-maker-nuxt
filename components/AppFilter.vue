@@ -81,6 +81,6 @@ watch(selectedLocale, (newLocale) => {
 
 <style scoped>
 select {
-  @apply h-10 w-44 cursor-pointer rounded px-2 focus:outline-none;
+  @apply h-10 w-44 cursor-pointer rounded px-2 focus:outline-none lg:!mt-0;
 }
 </style>

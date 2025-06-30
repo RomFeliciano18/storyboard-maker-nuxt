@@ -48,7 +48,7 @@ const variant = computed(() => props.product.colors[props.activeIndex]);
       </div>
       <button v-if="product.colors.length > 1" @click="prevVariant" class="absolute left-1 top-1/2 z-10 -translate-y-1/2"><i class="ri-arrow-left-circle-line rounded-full bg-white text-4xl transition-colors hover:text-yellow-500"></i></button>
       <div
-        class="flex h-auto min-h-full w-full items-center justify-center p-4 transition-transform duration-300 ease-in-out"
+        class="flex h-auto min-h-72 w-full items-center justify-center p-4 transition-transform duration-300 ease-in-out"
         :class="{
           'slide-left': isSliding && direction === 'left',
           'slide-right': isSliding && direction === 'right',

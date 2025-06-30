@@ -55,6 +55,12 @@ const groupedProducts = computed(() => {
   return categoryMap;
 });
 
+const productsState = useState('productsState');
+
+onMounted(() => {
+  productsState.value = dataProds.value?.products;
+});
+
 useHead({
   title: 'Products | StoryBoard',
 });

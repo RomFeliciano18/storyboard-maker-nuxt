@@ -28,7 +28,7 @@ const updateVariant = (code, index) => {
         <h1 class="montserrat-bold text-4xl text-yellow-500 sm:text-6xl">{{ category }}</h1>
         <span class="text-lg font-semibold">({{ products?.length }} {{ $t('Home.results') }})</span>
       </div>
-      <MainButton v-if="products?.length > 20" @click="viewAll = !viewAll" class="w-32">
+      <MainButton v-if="products?.length > 20" @click="viewAll = !viewAll" :class="!viewAll ? 'w-32' : 'w-36'">
         {{ viewAll ? $t('Home.showLess') : $t('Home.viewAll') }}
       </MainButton>
     </div>

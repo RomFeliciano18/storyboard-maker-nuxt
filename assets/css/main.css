@@ -27,5 +27,5 @@
 }
 
 .container-padding{
-  @apply 3xl:px-96 px-4 2xl:px-80 lg:px-24
+  @apply  px-4 md:px-10 xl:px-24 2xl:px-80 3xl:px-96
 }

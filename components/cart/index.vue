@@ -18,7 +18,7 @@ const cartSlots = computed(() => {
           <span>{{ $t('Home.next') }}</span>
           <i class="ri-arrow-right-circle-line lg:text-xl"></i>
         </MainButton>
-        <MainButton variant="secondary" class="w-full lg:w-44">{{ $t('Home.clearSelection') }}</MainButton>
+        <MainButton variant="secondary" @click="cart.removeAll" class="w-full lg:w-44">{{ $t('Home.clearSelection') }}</MainButton>
       </div>
     </div>
   </div>
