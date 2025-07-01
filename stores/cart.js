@@ -24,10 +24,16 @@ export const useCart = defineStore('cart', () => {
         return;
       }
 
-      const exists = cart.products.some((p) => p.productCode === productCode);
+      const exists = cart.products.some(
+        (p) =>
+          p.productCode === productCode &&
+          p.color?.toLowerCase() === selectedColorData.color?.toLowerCase()
+      );
 
       if (exists) {
-        console.log(`Product with code ${productCode} is already in the cart.`);
+        console.log(
+          `Product with code ${productCode} and color "${selectedColorData.color}" is already in the cart.`
+        );
         return;
       }
 

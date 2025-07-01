@@ -32,6 +32,10 @@ const setVariant = (index) => {
 };
 
 const variant = computed(() => props.product.colors[props.activeIndex]);
+
+const isInCart = computed(() => {
+  return cart.products.some((p) => p.productCode === props.product.productCode && p.color?.toLowerCase() === props.product.colors[props.activeIndex]?.color?.toLowerCase());
+});
 </script>
 
 <template>
@@ -46,6 +50,12 @@ const variant = computed(() => props.product.colors[props.activeIndex]);
           <i class="ri-price-tag-3-line"></i>
         </p>
       </div>
+      <!-- If added in cart add this base on productCode and its color -->
+      <!-- Show "In Cart" only if matched -->
+      <div v-if="isInCart" class="absolute right-2 top-2 z-10 rounded bg-yellow-500 px-2">
+        <i class="ri-shopping-cart-line text-2xl"></i>
+      </div>
+
       <button v-if="product.colors.length > 1" @click="prevVariant" class="absolute left-1 top-1/2 z-10 -translate-y-1/2"><i class="ri-arrow-left-circle-line rounded-full bg-white text-4xl transition-colors hover:text-yellow-500"></i></button>
       <div
         class="flex h-auto min-h-72 w-full items-center justify-center p-4 transition-transform duration-300 ease-in-out"
