@@ -24,31 +24,35 @@ export const useCart = defineStore('cart', () => {
         return;
       }
 
-      const exists = cart.products.some(
+      const isGiftset = type === 'giftset' && components.length > 0;
+      const comboIndex = comboCounter;
+      const kitId = isGiftset ? `${productCode}-${comboIndex}` : 'none';
+
+      const alreadyInCart = cart.products.some(
         (p) =>
           p.productCode === productCode &&
-          p.color?.toLowerCase() === selectedColorData.color?.toLowerCase()
+          p.color?.toLowerCase() === selectedColorData.color?.toLowerCase() &&
+          ((!isGiftset && p.kit === 'none') ||
+            (isGiftset && p.kit !== 'none' && p.combo !== undefined))
       );
 
-      if (exists) {
+      if (alreadyInCart) {
         console.log(
-          `Product with code ${productCode} and color "${selectedColorData.color}" is already in the cart.`
+          `Standalone product ${productCode} with color "${selectedColorData.color}" is already in the cart.`
         );
         return;
       }
 
-      if (cart.products.length >= 15) {
-        console.log('Cannot add more than 15 products to the cart.');
+      const itemsToAdd = 1 + (isGiftset ? components.length : 0);
+      const futureCartSize = cart.products.length + itemsToAdd;
+
+      if (futureCartSize > 15) {
+        console.log(
+          `Cannot add ${itemsToAdd} item(s): Cart would exceed the 15-product limit.`
+        );
         return;
       }
 
-      const isGiftset = type === 'giftset' && components.length > 0;
-      const kitId = isGiftset
-        ? `${productCode}-${cart.products.length + 1}`
-        : 'none';
-      const comboIndex = comboCounter;
-
-      // Main product (Giftset container or Single item)
       const mainProduct = {
         productCode,
         color: selectedColorData.color,
@@ -65,42 +69,40 @@ export const useCart = defineStore('cart', () => {
 
       cart.products.push(mainProduct);
 
-      // For giftset, push each component using mainProduct's selected color
       if (isGiftset) {
         components.forEach((compCode) => {
           const matched = productsState.value.find(
             (p) => p.productCode === compCode
           );
+          if (!matched) {
+            console.warn(`Component ${compCode} not found in productsState.`);
+            return;
+          }
 
           const sameProductColor = matched.colors.find(
-            (sameColor) => sameColor.color === selectedColorData.color
+            (c) => c.color === selectedColorData.color
           );
 
-          if (matched) {
-            const compItem = {
-              productCode: matched.productCode,
-              color: selectedColorData.color, // Use mainProduct's selected color
-              branding: matched.branloc?.[0]?.branding || null,
-              location: matched.branloc?.[0]?.location || null,
-              type: matched.type,
-              hex: sameProductColor?.hex?.replace('#', '') || '',
-              kit: kitId,
-              combo: comboIndex,
-              img: sameProductColor?.display || '',
-              AdditionalBranding: matched.AdditionalBranding,
-              hasBrandpatch: matched.hasBrandpatch,
-            };
-            cart.products.push(compItem);
-          } else {
-            console.warn(
-              `Component with code ${compCode} not found in productsState.`
-            );
-          }
+          const compItem = {
+            productCode: matched.productCode,
+            color: selectedColorData.color,
+            branding: matched.branloc?.[0]?.branding || null,
+            location: matched.branloc?.[0]?.location || null,
+            type: matched.type,
+            hex: sameProductColor?.hex?.replace('#', '') || '',
+            kit: kitId,
+            combo: comboIndex,
+            img: sameProductColor?.display || '',
+            AdditionalBranding: matched.AdditionalBranding,
+            hasBrandpatch: matched.hasBrandpatch,
+          };
+
+          cart.products.push(compItem);
         });
       }
 
       comboCounter++;
-      console.log('ITEMS IN CART: ', this.products);
+      console.log('ITEMS IN CART: ', cart.products);
     },
 
     remove(index) {
