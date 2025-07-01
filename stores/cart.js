@@ -4,6 +4,7 @@ export const useCart = defineStore('cart', () => {
 
   const cart = reactive({
     products: [],
+
     add(item, activeIndex) {
       const {
         productCode,
@@ -17,7 +18,8 @@ export const useCart = defineStore('cart', () => {
 
       console.log('Full Product Details: ', item);
 
-      if (!colors[activeIndex]) {
+      const selectedColorData = colors[activeIndex];
+      if (!selectedColorData) {
         console.error('Invalid active color index.');
         return;
       }
@@ -40,38 +42,45 @@ export const useCart = defineStore('cart', () => {
         : 'none';
       const comboIndex = comboCounter;
 
+      // Main product (Giftset container or Single item)
       const mainProduct = {
         productCode,
-        color: colors[activeIndex].color,
+        color: selectedColorData.color,
         branding: branloc[0]?.branding || null,
         location: branloc[0]?.location || null,
         type,
-        hex: colors[activeIndex].hex?.replace('#', '') || '',
+        hex: selectedColorData.hex?.replace('#', '') || '',
         kit: kitId,
         combo: comboIndex,
-        img: colors[activeIndex].display,
+        img: selectedColorData.display,
         AdditionalBranding,
         hasBrandpatch,
       };
 
       cart.products.push(mainProduct);
 
+      // For giftset, push each component using mainProduct's selected color
       if (isGiftset) {
         components.forEach((compCode) => {
           const matched = productsState.value.find(
             (p) => p.productCode === compCode
           );
+
+          const sameProductColor = matched.colors.find(
+            (sameColor) => sameColor.color === selectedColorData.color
+          );
+
           if (matched) {
             const compItem = {
               productCode: matched.productCode,
-              color: matched.colors?.[activeIndex]?.color || '',
+              color: selectedColorData.color, // Use mainProduct's selected color
               branding: matched.branloc?.[0]?.branding || null,
               location: matched.branloc?.[0]?.location || null,
               type: matched.type,
-              hex: matched.colors?.[activeIndex]?.hex?.replace('#', '') || '',
+              hex: sameProductColor?.hex?.replace('#', '') || '',
               kit: kitId,
               combo: comboIndex,
-              img: matched.colors?.[activeIndex]?.display || matched.img || '',
+              img: sameProductColor?.display || '',
               AdditionalBranding: matched.AdditionalBranding,
               hasBrandpatch: matched.hasBrandpatch,
             };
@@ -87,11 +96,13 @@ export const useCart = defineStore('cart', () => {
       comboCounter++;
       console.log('ITEMS IN CART: ', this.products);
     },
+
     remove(index) {
       if (index >= 0 && index < this.products.length) {
         this.products.splice(index, 1);
       }
     },
+
     removeAll() {
       this.products.splice(0);
       comboCounter = 1;
