@@ -1,9 +1,14 @@
 <script setup>
 import CarouselContainer from '@/components/CarouselContainer.vue';
 
-const props = defineProps(['products', 'category']);
+const props = defineProps(['products', 'category', 'isShowMore']);
 const activeVariants = ref({});
 const viewAll = ref(false);
+
+watchEffect(() => {
+  viewAll.value = props.isShowMore ?? false;
+});
+
 const layoutComponent = computed(() => (viewAll.value ? 'div' : CarouselContainer));
 
 watchEffect(() => {

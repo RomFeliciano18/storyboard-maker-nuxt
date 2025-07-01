@@ -15,7 +15,7 @@ const { locale } = useI18n();
         </NuxtLink>
       </div>
       <div>
-        <NuxtLink to="/upload-logo" class="flex w-48 items-center">
+        <NuxtLink :to="`/${locale}/upload-logo`" class="flex w-48 items-center">
           <span class="montserrat-bold text-[8rem]">2</span>
           <span class="w-36 text-2xl uppercase">
             {{ $t('Home.uploadImageProg') }}

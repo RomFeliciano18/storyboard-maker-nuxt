@@ -1,4 +1,5 @@
 <script setup>
+const route = useRoute();
 const { locale, t } = useI18n();
 
 const categories = [
@@ -15,6 +16,14 @@ const categories = [
 const { data: dataProds, status } = useProducts();
 const { data: dataFeatured } = useFeaturedProducts();
 
+const productsState = useState('productsState');
+
+watchEffect(() => {
+  if (dataProds.value?.products?.length) {
+    productsState.value = dataProds.value.products;
+  }
+});
+
 const featuredProducts = computed(() => {
   const featuredList = dataFeatured.value?.features[0]?.products || [];
   const featuredCode = featuredList.map(({ productCode }) => productCode);
@@ -27,11 +36,17 @@ const featuredTitle = computed(() => {
   return locale.value == 'fr' ? dataFeatured.value?.features[0].nameFR : dataFeatured.value?.features[0].name;
 });
 
-const groupedProducts = computed(() => {
+const filteredGroupedProducts = computed(() => {
   const products = dataProds.value?.products || [];
+
+  const filtered = products.filter((product) => {
+    const matchCategory = filterCategory.value === 'all' || product.type === filterCategory.value;
+    return matchCategory;
+  });
+
   const categoryMap = new Map();
 
-  for (const product of products) {
+  for (const product of filtered) {
     const category = product.type || 'Uncategorized';
 
     if (!categoryMap.has(category)) {
@@ -55,10 +70,14 @@ const groupedProducts = computed(() => {
   return categoryMap;
 });
 
-const productsState = useState('productsState');
+const filterCategory = ref(route.query.category || 'all');
 
-onMounted(() => {
-  productsState.value = dataProds.value?.products;
+const handleFilterUpdate = (newFilter) => {
+  filterCategory.value = newFilter;
+};
+
+const hasFilters = computed(() => {
+  return filterCategory.value !== 'all';
 });
 
 useHead({
@@ -75,13 +94,14 @@ useHead({
     <template v-if="status === 'success'">
       <div class="top-0 z-50 sm:sticky">
         <Cart />
-        <AppFilter />
+        <AppFilter :products="dataProds.products" @update:filter="handleFilterUpdate" />
       </div>
 
       <div class="container-padding">
-        <ProductContainer :products="featuredProducts" :category="featuredTitle" />
+        <ProductContainer v-if="!hasFilters" :products="featuredProducts" :category="featuredTitle" />
+
         <template v-for="category in categories">
-          <ProductContainer v-if="groupedProducts.get(category.key).length > 1" :key="category.key" :products="groupedProducts.get(category.key)" :category="category.name" />
+          <ProductContainer v-if="filteredGroupedProducts.get(category.key)?.length > 0" :key="category.key" :products="filteredGroupedProducts.get(category.key)" :category="category.name" :isShowMore="hasFilters" />
         </template>
       </div>
     </template>

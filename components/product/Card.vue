@@ -34,7 +34,16 @@ const setVariant = (index) => {
 const variant = computed(() => props.product.colors[props.activeIndex]);
 
 const isInCart = computed(() => {
-  return cart.products.some((p) => p.productCode === props.product.productCode && p.color?.toLowerCase() === props.product.colors[props.activeIndex]?.color?.toLowerCase());
+  const currentColor = props.product.colors[props.activeIndex]?.color?.toLowerCase();
+
+  return cart.products.some((p) => {
+    const isSameProduct = p.productCode === props.product.productCode;
+    const isSameColor = p.color?.toLowerCase() === currentColor;
+    const isStandalone = p.kit === 'none';
+    const isGiftsetMain = p.kit?.startsWith(props.product.productCode) && p.combo !== undefined;
+
+    return isSameProduct && isSameColor && (isStandalone || isGiftsetMain);
+  });
 });
 </script>
 
@@ -85,7 +94,7 @@ const isInCart = computed(() => {
     </div>
 
     <div class="space-y-1 p-2">
-      <h3 :class="['truncate font-bold 3xl:w-80', !viewAll && 'w-72']">{{ product.summary }}</h3>
+      <h3 :class="['truncate font-bold 3xl:w-80', !viewAll && 'w-72']" v-html="product.summary"></h3>
       <div :class="['flex gap-2 font-semibold uppercase 3xl:w-80', !viewAll && 'w-72']">
         <span>{{ product.productCode }}</span>
         <span class="truncate" v-html="product.name"></span>

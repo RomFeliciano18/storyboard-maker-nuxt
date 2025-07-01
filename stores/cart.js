@@ -106,7 +106,20 @@ export const useCart = defineStore('cart', () => {
     },
 
     remove(index) {
-      if (index >= 0 && index < this.products.length) {
+      const target = this.products[index];
+      if (!target) return;
+
+      if (target.kit !== 'none' && target.combo !== undefined) {
+        const kitId = target.kit;
+        const comboIndex = target.combo;
+
+        for (let i = this.products.length - 1; i >= 0; i--) {
+          const p = this.products[i];
+          if (p.kit === kitId && p.combo === comboIndex) {
+            this.products.splice(i, 1);
+          }
+        }
+      } else {
         this.products.splice(index, 1);
       }
     },
