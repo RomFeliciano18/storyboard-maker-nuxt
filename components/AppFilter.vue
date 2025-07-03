@@ -1,5 +1,5 @@
 <script setup>
-const props = defineProps(['products']);
+const props = defineProps(['products', 'activeCategory']);
 
 const categoryMap = {
   notebook: 'books',
@@ -16,12 +16,13 @@ const emit = defineEmits(['update:filter', 'submit:search']);
 const { locale, locales, setLocale, t } = useI18n();
 const route = useRoute();
 const router = useRouter();
+const searchedColor = useState('searchedColor');
 const selectedLocale = ref(locale.value);
-const selectedCategory = ref(route.query.category || 'all');
-const inputSearch = ref('');
+const selectedCategory = ref(props.activeCategory || route.query.category || 'all');
+const inputSearch = ref(route.query.search || '');
 
 const categories = computed(() => {
-  const productTypes = new Set(props.products.map((p) => p.type));
+  const productTypes = new Set(props.products?.map((p) => p.type));
 
   return Object.entries(categoryMap)
     .filter(([key]) => productTypes.has(key))
@@ -38,6 +39,23 @@ const copyFullUrl = () => {
 };
 
 let isResetting = false;
+
+const handleSearch = () => {
+  if (!inputSearch.value) {
+    searchedColor.value = '';
+  }
+
+  const newSearch = inputSearch.value?.trim() || undefined;
+
+  router.push({
+    query: {
+      ...route.query,
+      search: newSearch,
+    },
+  });
+
+  emit('submit:search', newSearch);
+};
 
 watch(
   () => selectedCategory.value,
@@ -60,6 +78,8 @@ watch(
 const handleReset = async () => {
   isResetting = true;
   selectedCategory.value = 'all';
+  inputSearch.value = '';
+  searchedColor.value = '';
 
   await router.replace({ query: {} });
 

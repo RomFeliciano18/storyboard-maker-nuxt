@@ -6,13 +6,14 @@ const emit = defineEmits(['update:activeIndex']);
 const isSliding = ref(false);
 const direction = ref('');
 
+const searchedColor = useState('searchedColor');
+
 const nextVariant = () => {
   if (isSliding.value) return;
   direction.value = 'left';
   isSliding.value = true;
   emit('update:activeIndex', (props.activeIndex + 1) % props.product.colors.length);
   setTimeout(() => (isSliding.value = false), 300);
-  console.log(cart.products);
 };
 
 const prevVariant = () => {
@@ -44,6 +45,23 @@ const isInCart = computed(() => {
 
     return isSameProduct && isSameColor && (isStandalone || isGiftsetMain);
   });
+});
+
+watchEffect(() => {
+  const query = searchedColor.value?.toLowerCase().trim();
+  if (!query || !props.product?.colors?.length) return;
+
+  // Try exact match first
+  let foundIndex = props.product.colors.findIndex((c) => c.displayColor?.toLowerCase() === query);
+
+  // Fallback: fuzzy match (e.g. "blue" in "navy blue")
+  if (foundIndex === -1) {
+    foundIndex = props.product.colors.findIndex((c) => c.displayColor?.toLowerCase().includes(query));
+  }
+
+  if (foundIndex !== -1 && foundIndex !== props.activeIndex) {
+    emit('update:activeIndex', foundIndex);
+  }
 });
 </script>
 

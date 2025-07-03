@@ -17,12 +17,44 @@ const { data: dataProds, status } = useProducts();
 const { data: dataFeatured } = useFeaturedProducts();
 
 const productsState = useState('productsState');
+const isSearching = ref(false);
+const activeCategory = ref('');
+const searchedColor = useState('searchedColor', () => '');
 
 watchEffect(() => {
-  if (dataProds.value?.products?.length) {
+  if (!route.query.search && dataProds.value?.products?.length) {
     productsState.value = dataProds.value.products;
   }
 });
+
+watch(
+  () => route.query.search,
+  async (searchQuery) => {
+    if (!route.query.search) return;
+
+    isSearching.value = true;
+
+    const formData = new FormData();
+    formData.append('search', searchQuery);
+    formData.append('lang', locale.value === 'us' ? 'EN' : locale.value.toUpperCase());
+    formData.append('country', locale.value === 'us' ? 'US' : 'CA');
+
+    try {
+      const result = await $fetch('http://20.123.82.238:7700/product/search', {
+        method: 'POST',
+        body: formData,
+      });
+      productsState.value = result.products || [];
+      activeCategory.value = result.types.length > 1 ? 'all' : result.types[0];
+      searchedColor.value = result.colors.length === 1 ? result.colors[0] : '';
+    } catch (err) {
+      console.error('Search failed:', err);
+    } finally {
+      isSearching.value = false;
+    }
+  },
+  { immediate: true }
+);
 
 const featuredProducts = computed(() => {
   const featuredList = dataFeatured.value?.features[0]?.products || [];
@@ -37,7 +69,7 @@ const featuredTitle = computed(() => {
 });
 
 const filteredGroupedProducts = computed(() => {
-  const products = dataProds.value?.products || [];
+  const products = !route.query.search ? dataProds.value.products : productsState.value;
 
   const filtered = products.filter((product) => {
     const matchCategory = filterCategory.value === 'all' || product.type === filterCategory.value;
@@ -77,7 +109,7 @@ const handleFilterUpdate = (newFilter) => {
 };
 
 const hasFilters = computed(() => {
-  return filterCategory.value !== 'all';
+  return filterCategory.value !== 'all' || !!route.query.search;
 });
 
 useHead({
@@ -87,24 +119,23 @@ useHead({
 
 <template>
   <div class="relative">
-    <div v-if="status === 'pending'" class="flex h-96 flex-col items-center justify-center">
-      <Spinner />
-    </div>
-
-    <template v-if="status === 'success'">
+    <ClientOnly>
       <div class="top-0 z-50 sm:sticky">
         <Cart />
-        <AppFilter :products="dataProds.products" @update:filter="handleFilterUpdate" />
+        <AppFilter :products="productsState" :activeCategory="activeCategory" @update:filter="handleFilterUpdate" />
       </div>
 
-      <div class="container-padding">
-        <ProductContainer v-if="!hasFilters" :products="featuredProducts" :category="featuredTitle" />
+      <div v-if="status === 'pending' || isSearching" class="flex h-96 flex-col items-center justify-center">
+        <Spinner />
+      </div>
 
+      <div v-else class="container-padding">
+        <ProductContainer v-if="!hasFilters" :products="featuredProducts" :category="featuredTitle" />
         <template v-for="category in categories">
           <ProductContainer v-if="filteredGroupedProducts.get(category.key)?.length > 0" :key="category.key" :products="filteredGroupedProducts.get(category.key)" :category="category.name" :isShowMore="hasFilters" />
         </template>
       </div>
-    </template>
+    </ClientOnly>
   </div>
 </template>
 
