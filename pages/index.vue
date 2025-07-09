@@ -16,6 +16,12 @@ const categories = [
 const { data: dataProds, status } = useProducts();
 const { data: dataFeatured } = useFeaturedProducts();
 
+const modalState = useState('modalState', () => ({
+  open: false,
+  data: {},
+}));
+const selectedColor = ref(null); // Holds the selected color object
+
 const productsState = useState('productsState');
 const isSearching = ref(false);
 const activeCategory = ref('');
@@ -112,6 +118,11 @@ const hasFilters = computed(() => {
   return filterCategory.value !== 'all' || !!route.query.search;
 });
 
+const handleConfirmCombo = () => {
+  modalState.value.data.onConfirm(selectedColor.value);
+  selectedColor.value = '';
+};
+
 useHead({
   title: 'Products | StoryBoard',
 });
@@ -137,6 +148,18 @@ useHead({
       </div>
     </ClientOnly>
   </div>
+
+  <Modal :isOpenModal="modalState.open" @close="modalState.open = false">
+    <div class="flex flex-col items-center justify-center gap-4">
+      <h2 class="text-xl">Please select the color of Pen</h2>
+      <img src="/pen-combo/i128.webp" alt="" />
+      <div class="flex flex-wrap items-center justify-center gap-2">
+        <div v-for="(color, idx) in modalState.data.component?.colors || []" :key="idx" @click="selectedColor = color" class="h-10 w-10 cursor-pointer rounded-full border border-neutral-500 transition-all ease-in-out hover:scale-110" :style="{ background: color.hex || '#ccc', boxShadow: selectedColor?.color === color.color ? '0 0 0 2px #000' : '' }" />
+      </div>
+
+      <MainButton class="w-full" :disabled="!selectedColor" @click="handleConfirmCombo">Confirm</MainButton>
+    </div>
+  </Modal>
 </template>
 
 <style scoped></style>
