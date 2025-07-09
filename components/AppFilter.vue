@@ -95,9 +95,9 @@ watch(selectedLocale, (newLocale) => {
 <template>
   <div class="container-padding flex flex-wrap items-center justify-between space-y-2 bg-black p-2 md:h-20">
     <div class="flex flex-wrap items-center gap-2">
-      <form @submit.prevent="handleSearch" class="relative ml-7">
+      <form @submit.prevent="handleSearch" class="relative ml-7 w-full sm:w-auto">
         <NuxtImg src="/icons/icon-search.png" class="absolute -left-7 w-10" />
-        <input type="text" v-model="inputSearch" :placeholder="$t('Home.blueBottles')" class="w-96 rounded p-2 px-3 pr-12 placeholder:uppercase focus:outline-none" />
+        <input type="text" v-model="inputSearch" :placeholder="$t('Home.blueBottles')" class="w-full rounded p-2 px-3 pr-12 placeholder:uppercase focus:outline-none sm:w-96" />
         <MainButton class="absolute right-0 top-1/2 h-10 !w-10 -translate-y-1/2 border-none">
           <i class="ri-search-line text-xl"></i>
         </MainButton>
@@ -105,23 +105,26 @@ watch(selectedLocale, (newLocale) => {
       <MainButton variant="secondary" @click="copyFullUrl" class="h-10 !w-10 border-none">
         <i class="ri-link text-xl"></i>
       </MainButton>
-      <label class="ml-4 text-white">{{ $t('Home.filters') }}:</label>
-      <select v-model="selectedCategory">
+      <label class="text-white sm:ml-4">{{ $t('Home.filters') }}:</label>
+      <select v-model="selectedCategory" class="select-category">
         <option value="all">{{ $t('Home.categories') }}</option>
         <option v-for="category in categories" :value="category.key">{{ category.name }}</option>
       </select>
 
-      <MainButton @click="handleReset" class="w-auto">{{ $t('Home.resetFilter') }}</MainButton>
+      <MainButton @click="handleReset" class="sm:w-auto">{{ $t('Home.resetFilter') }}</MainButton>
     </div>
 
-    <select v-model="selectedLocale">
+    <select v-model="selectedLocale" class="select-language">
       <option v-for="locale in locales" :value="locale.code" :key="locale.code">{{ locale.name }}</option>
     </select>
   </div>
 </template>
 
 <style scoped>
-select {
-  @apply h-10 w-44 cursor-pointer rounded px-2 focus:outline-none lg:!mt-0;
+.select-category {
+  @apply h-10 w-auto cursor-pointer rounded px-2 focus:outline-none sm:w-44 lg:!mt-0;
+}
+.select-language {
+  @apply h-10 w-full cursor-pointer rounded px-2 focus:outline-none sm:w-44 lg:!mt-0;
 }
 </style>

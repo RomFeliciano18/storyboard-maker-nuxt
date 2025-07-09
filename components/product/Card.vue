@@ -1,4 +1,6 @@
 <script setup>
+import { decode } from 'html-entities';
+
 const props = defineProps(['product', 'viewAll', 'activeIndex']);
 const cart = useCart();
 const emit = defineEmits(['update:activeIndex']);
@@ -63,6 +65,10 @@ watchEffect(() => {
     emit('update:activeIndex', foundIndex);
   }
 });
+
+const decodedName = computed(() => {
+  return decode(decodeURIComponent(props.product.name || ''));
+});
 </script>
 
 <template>
@@ -115,7 +121,8 @@ watchEffect(() => {
       <h3 :class="['truncate font-bold 3xl:w-80', !viewAll && 'w-72']" v-html="product.summary"></h3>
       <div :class="['flex gap-2 font-semibold uppercase 3xl:w-80', !viewAll && 'w-72']">
         <span>{{ product.productCode }}</span>
-        <span class="truncate" v-html="product.name"></span>
+        <!-- Apply it here in my product name -->
+        <span class="truncate" v-html="decodedName"></span>
       </div>
       <p class="text-sm">{{ $t('Home.aslowas') }}: ${{ variant.price.toFixed(2) }}</p>
       <p class="text-sm">{{ $t('Home.moq') }}: {{ variant.MOQ }}</p>
