@@ -51,7 +51,8 @@ watch(
         body: formData,
       });
       productsState.value = result.products || [];
-      activeCategory.value = result.types.length > 1 ? 'all' : result.types[0];
+
+      activeCategory.value = result.types.length === 1 ? result.types[0] : 'all';
       searchedColor.value = result.colors.length === 1 ? result.colors[0] : '';
     } catch (err) {
       console.error('Search failed:', err);
@@ -152,7 +153,7 @@ useHead({
   <Modal :isOpenModal="modalState.open" @close="modalState.open = false">
     <div class="flex flex-col items-center justify-center gap-4">
       <h2 class="text-xl">Please select the color of Pen</h2>
-      <img src="/pen-combo/i128.webp" alt="" />
+      <img :src="`/pen-combo/${modalState.data.component.productCode}.webp`" alt="" />
       <div class="flex flex-wrap items-center justify-center gap-2">
         <div v-for="(color, idx) in modalState.data.component?.colors || []" :key="idx" @click="selectedColor = color" class="h-10 w-10 cursor-pointer rounded-full border border-neutral-500 transition-all ease-in-out hover:scale-110" :style="{ background: color.hex || '#ccc', boxShadow: selectedColor?.color === color.color ? '0 0 0 2px #000' : '' }" />
       </div>

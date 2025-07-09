@@ -18,8 +18,39 @@ const route = useRoute();
 const router = useRouter();
 const searchedColor = useState('searchedColor');
 const selectedLocale = ref(locale.value);
-const selectedCategory = ref(props.activeCategory || route.query.category || 'all');
 const inputSearch = ref(route.query.search || '');
+const selectedCategory = ref(route.query.category || props.activeCategory || 'all');
+
+watch(
+  () => route.query.category,
+  (newVal) => {
+    selectedCategory.value = newVal || 'all';
+    emit('update:filter', selectedCategory.value);
+  }
+);
+
+watch(
+  () => props.activeCategory,
+  (newVal) => {
+    if (!route.query.category) {
+      selectedCategory.value = newVal || 'all';
+      emit('update:filter', selectedCategory.value);
+    }
+  }
+);
+
+watch(selectedCategory, (newVal) => {
+  if (isResetting) return;
+
+  const { category, ...rest } = route.query;
+
+  router.push({
+    query: {
+      ...rest,
+      category: newVal === 'all' ? undefined : newVal,
+    },
+  });
+});
 
 const categories = computed(() => {
   const productTypes = new Set(props.products?.map((p) => p.type));
@@ -41,39 +72,21 @@ const copyFullUrl = () => {
 let isResetting = false;
 
 const handleSearch = () => {
-  if (!inputSearch.value) {
-    searchedColor.value = '';
-  }
-
   const newSearch = inputSearch.value?.trim() || undefined;
 
-  router.push({
-    query: {
-      ...route.query,
-      search: newSearch,
-    },
-  });
+  const newQuery = {
+    search: newSearch,
+  };
 
+  if (!newSearch) {
+    delete newQuery.category;
+    searchedColor.value = '';
+    emit('update:filter', 'all');
+  }
+
+  router.push({ query: newQuery });
   emit('submit:search', newSearch);
 };
-
-watch(
-  () => selectedCategory.value,
-  (newCategory) => {
-    if (isResetting) return;
-
-    const { category, ...restQuery } = route.query;
-
-    router.push({
-      query: {
-        ...restQuery,
-        category: newCategory === 'all' ? undefined : newCategory,
-      },
-    });
-
-    emit('update:filter', selectedCategory.value);
-  }
-);
 
 const handleReset = async () => {
   isResetting = true;
