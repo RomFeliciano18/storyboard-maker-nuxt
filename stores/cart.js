@@ -1,12 +1,13 @@
-export const useCart = defineStore('cart', () => {
-  const productsState = useState('productsState');
-  const modalState = useState('modalState');
-  let comboCounter = 1;
+export const useCart = defineStore(
+  'cart',
+  () => {
+    const productsState = useState('productsState');
+    const modalState = useState('modalState');
+    let comboCounter = 1;
 
-  const cart = reactive({
-    products: [],
+    const products = ref([]);
 
-    add(item, activeIndex) {
+    const add = async (item, activeIndex) => {
       const {
         productCode,
         AdditionalBranding,
@@ -37,7 +38,7 @@ export const useCart = defineStore('cart', () => {
       // For Notebook
       if (isNotebook) {
         // Checker if the notebook with the same color is already in the cart
-        // const notebookAlreadyInCart = cart.products.some(
+        // const notebookAlreadyInCart = products.value.some(
         //   (p) =>
         //     p.productCode === productCode &&
         //     p.color === selectedColorData.color &&
@@ -50,7 +51,7 @@ export const useCart = defineStore('cart', () => {
         // }
 
         const itemsToAdd = 1 + (isNotebook ? 1 : 0);
-        const futureCartSize = cart.products.length + itemsToAdd;
+        const futureCartSize = products.value.length + itemsToAdd;
         if (futureCartSize > 15) {
           console.log(`Cannot add more than 15 products.`);
           return;
@@ -76,7 +77,7 @@ export const useCart = defineStore('cart', () => {
               comboIndex,
               onConfirm: (selectedCompColor) => {
                 // Push the main product
-                cart.products.push({
+                products.value.push({
                   productCode,
                   color: selectedColorData.color,
                   branding: branloc[0]?.branding || null,
@@ -91,7 +92,7 @@ export const useCart = defineStore('cart', () => {
                 });
 
                 // Push the main products component
-                cart.products.push({
+                products.value.push({
                   productCode: matchedComponent.productCode,
                   color: selectedCompColor.color,
                   branding: matchedComponent.branloc?.[0]?.branding || null,
@@ -107,7 +108,7 @@ export const useCart = defineStore('cart', () => {
 
                 modalState.value = { open: false, data: {} };
                 comboCounter++;
-                console.log('ITEMS IN CART: ', cart.products);
+                console.log('ITEMS IN CART: ', products.value);
                 resolve();
               },
             },
@@ -130,7 +131,7 @@ export const useCart = defineStore('cart', () => {
           componentList
         );
       } else {
-        alreadyInCart = cart.products.some(
+        alreadyInCart = products.value.some(
           (p) =>
             p.productCode === productCode &&
             p.color === selectedColorData.color &&
@@ -144,14 +145,14 @@ export const useCart = defineStore('cart', () => {
       }
 
       const itemsToAdd = 1 + (isGiftset ? components.length : 0);
-      const futureCartSize = cart.products.length + itemsToAdd;
+      const futureCartSize = products.value.length + itemsToAdd;
       if (futureCartSize > 15) {
         console.log(`Cannot add more than 15 products.`);
         return;
       }
 
       // Push main product
-      cart.products.push({
+      products.value.push({
         productCode,
         color: selectedColorData.color,
         branding: branloc[0]?.branding || null,
@@ -177,7 +178,7 @@ export const useCart = defineStore('cart', () => {
             (c) => c.color === selectedColorData.color
           );
 
-          cart.products.push({
+          products.value.push({
             productCode: matched.productCode,
             color: selectedColorData.color,
             branding: matched.branloc?.[0]?.branding || null,
@@ -194,59 +195,74 @@ export const useCart = defineStore('cart', () => {
       }
 
       comboCounter++;
-      console.log('ITEMS IN CART: ', cart.products);
-    },
+      console.log('ITEMS IN CART: ', products.value);
+    };
 
-    remove(index) {
-      const target = this.products[index];
+    const remove = (index) => {
+      const target = products.value[index];
       if (!target) return;
 
       if (target.kit !== 'none' && target.combo !== undefined) {
         const kitId = target.kit;
         const comboIndex = target.combo;
 
-        for (let i = this.products.length - 1; i >= 0; i--) {
-          const p = this.products[i];
+        for (let i = products.value.length - 1; i >= 0; i--) {
+          const p = products.value[i];
           if (p.kit === kitId && p.combo === comboIndex) {
-            this.products.splice(i, 1);
+            products.value.splice(i, 1);
           }
         }
       } else {
-        this.products.splice(index, 1);
+        products.value.splice(index, 1);
       }
-    },
+    };
 
-    removeAll() {
-      this.products.splice(0);
+    const removeAll = () => {
+      products.value.splice(0);
       comboCounter = 1;
-    },
-  });
+    };
 
-  const isComboDuplicate = (mainCode, mainColor, componentList) => {
-    return cart.products.some((p) => {
-      if (
-        p.productCode !== mainCode ||
-        p.color !== mainColor ||
-        p.kit === 'none'
-      )
-        return false;
-
-      const combo = p.combo;
-      const kit = p.kit;
-
-      const componentsInCart = cart.products.filter(
-        (c) => c.kit === kit && c.combo === combo && c.productCode !== mainCode
-      );
-
-      if (componentsInCart.length !== componentList.length) return false;
-
-      return componentList.every((comp) =>
-        componentsInCart.some(
-          (c) => c.productCode === comp.productCode && c.color === comp.color
+    const isComboDuplicate = (mainCode, mainColor, componentList) => {
+      return products.value.some((p) => {
+        if (
+          p.productCode !== mainCode ||
+          p.color !== mainColor ||
+          p.kit === 'none'
         )
-      );
-    });
-  };
+          return false;
 
-  return cart;
-});
+        const combo = p.combo;
+        const kit = p.kit;
+
+        const componentsInCart = products.value.filter(
+          (c) =>
+            c.kit === kit && c.combo === combo && c.productCode !== mainCode
+        );
+
+        if (componentsInCart.length !== componentList.length) return false;
+
+        return componentList.every((comp) =>
+          componentsInCart.some(
+            (c) => c.productCode === comp.productCode && c.color === comp.color
+          )
+        );
+      });
+    };
+
+    return {
+      products, // ✅ exposed at top level
+      add,
+      remove,
+      removeAll,
+      isComboDuplicate,
+    };
+
+    // ---------------------------------------------------------------
+  },
+  {
+    persist: {
+      storage: localStorage,
+      paths: ['products'],
+    },
+  }
+);

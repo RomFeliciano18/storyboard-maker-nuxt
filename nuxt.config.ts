@@ -3,7 +3,7 @@ export default defineNuxtConfig({
   // ssr: false,
   compatibilityDate: '2025-05-15',
   devtools: { enabled: true },
-  modules: ['@pinia/nuxt', '@nuxt/image', '@nuxtjs/i18n', '@vueuse/nuxt'],
+  modules: ['@pinia/nuxt', 'pinia-plugin-persistedstate/nuxt', '@nuxt/image', '@nuxtjs/i18n', '@vueuse/nuxt'],
   css: ['~/assets/css/main.css', 'remixicon/fonts/remixicon.css'],
   postcss: {
     plugins: {
