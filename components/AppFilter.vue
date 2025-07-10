@@ -102,6 +102,16 @@ const handleReset = async () => {
 
 watch(selectedLocale, (newLocale) => {
   setLocale(newLocale);
+
+  router.replace({
+    path: `/${newLocale}${route.path.replace(/^\/[a-z]{2}/, '')}`,
+    query: {},
+  });
+
+  inputSearch.value = '';
+  selectedCategory.value = 'all';
+  searchedColor.value = '';
+  emit('update:filter', 'all');
 });
 </script>
 
