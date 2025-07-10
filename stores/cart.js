@@ -256,12 +256,10 @@ export const useCart = defineStore(
       removeAll,
       isComboDuplicate,
     };
-
-    // ---------------------------------------------------------------
   },
   {
     persist: {
-      storage: localStorage,
+      storage: piniaPluginPersistedstate.localStorage(),
       paths: ['products'],
     },
   }

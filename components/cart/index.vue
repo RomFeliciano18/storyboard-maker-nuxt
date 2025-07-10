@@ -1,8 +1,17 @@
 <script setup>
+const { locale } = useI18n();
+const router = useRouter();
 const cart = useCart();
 const cartSlots = computed(() => {
   return Array.from({ length: 15 }, (_, index) => cart.products[index] || null);
 });
+
+const handleGoToUpload = () => {
+  if (cart.products.length === 0) {
+    return;
+  }
+  router.push(`${locale.value}/upload-logo`);
+};
 </script>
 
 <template>
@@ -14,7 +23,7 @@ const cartSlots = computed(() => {
       </CarouselContainer>
 
       <div class="col-span-12 flex flex-row items-center justify-start gap-2 lg:col-span-2 lg:flex-col lg:items-end lg:py-2">
-        <MainButton class="w-full lg:h-full lg:w-44">
+        <MainButton @click="handleGoToUpload" class="w-full lg:h-full lg:w-44">
           <span>{{ $t('Home.next') }}</span>
           <i class="ri-arrow-right-circle-line lg:text-xl"></i>
         </MainButton>

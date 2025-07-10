@@ -1,6 +1,8 @@
 <script setup>
 const { locale } = useI18n();
 const route = useRoute();
+const router = useRouter();
+const cart = useCart();
 const tutorialOpen = ref(false);
 
 const tutorialLink = computed(() => {
@@ -20,14 +22,23 @@ const tutorialLink = computed(() => {
 
   return null;
 });
+
+const handleGoToUpload = () => {
+  if (cart.products.length === 0) {
+    return;
+  }
+  router.push(`${locale.value}/upload-logo`);
+};
 </script>
 
 <template>
   <header class="relative flex items-center justify-center lg:justify-start">
-    <NuxtImg src="/logo.png" alt="logo" class="w-96 px-10 py-4 lg:py-0" />
+    <NuxtLink :to="`/${locale}`">
+      <NuxtImg src="/logo.png" alt="logo" class="w-96 px-10 py-4 lg:py-0" />
+    </NuxtLink>
     <nav class="hidden w-full grid-cols-3 bg-black px-10 text-neutral-400 lg:grid">
       <div>
-        <NuxtLink :to="`/${locale}`" class="flex w-48 items-center transition-colors hover:text-primary">
+        <NuxtLink :to="`/${locale}`" :class="['flex w-48 cursor-pointer items-center transition-colors hover:text-primary', route.path === `/${locale}` ? 'active-link' : '']">
           <span class="montserrat-bold text-[8rem]">1</span>
           <span class="w-36 text-2xl uppercase">
             {{ $t('Home.selectProductsProg') }}
@@ -35,14 +46,14 @@ const tutorialLink = computed(() => {
         </NuxtLink>
       </div>
       <div>
-        <NuxtLink :to="`/${locale}/upload-logo`" class="flex w-48 items-center transition-colors hover:text-primary">
+        <div @click="handleGoToUpload" :class="['flex w-48 cursor-pointer items-center transition-colors hover:text-primary', route.path === `/${locale}/upload-logo` ? 'active-link' : '']">
           <span class="montserrat-bold text-[8rem]">2</span>
           <span class="w-36 text-2xl uppercase">
             {{ $t('Home.uploadImageProg') }}
           </span>
-        </NuxtLink>
+        </div>
       </div>
-      <div @click="() => console.log(tutorialLink)" class="flex w-48 items-center">
+      <div :class="['flex w-48 cursor-pointer items-center transition-colors hover:text-primary', route.path === `/${locale}/render-page` ? 'active-link' : '']">
         <span class="montserrat-bold text-[8rem]">3</span>
         <span class="w-36 text-2xl uppercase">
           {{ $t('Home.selectLayoutProg') }}
@@ -60,7 +71,7 @@ const tutorialLink = computed(() => {
 </template>
 
 <style scoped>
-.router-link-active {
+.active-link {
   @apply text-primary;
 }
 </style>
