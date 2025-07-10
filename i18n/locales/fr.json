@@ -180,5 +180,6 @@
     "productColor": "Couleur du Produit",
     "selectProductColor": "Sélectionner la Couleur du Produit",
     "brandingColor": "Couleur du Marquage"
-  }
+  },
+  "uploadNote": "*Remarque: Lors du téléchargement de fichiers AI, EPS, PDF ou similaires, veuillez vous assurer que le contenu est correctement vectorisé afin d'éviter les problèmes de conversion."
 }

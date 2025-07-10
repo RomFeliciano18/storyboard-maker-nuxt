@@ -180,5 +180,6 @@
     "selectProductColor": "Select Product Color",
     "brandingColor": "Branding Color",
     "applyChanges": "Apply Changes"
-  }
+  },
+  "uploadNote": "*Note: When uploading AI, EPS, PDF, or similar files, please ensure the content is properly vectorized to avoid conversion issues."
 }

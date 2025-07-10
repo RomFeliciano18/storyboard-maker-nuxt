@@ -72,7 +72,7 @@ onUnmounted(() => {
   background: rgb(255, 255, 255);
   padding: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-  @apply rounded;
+  @apply rounded-lg;
 }
 
 .modal-enter-from {

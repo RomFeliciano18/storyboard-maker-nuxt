@@ -20,9 +20,10 @@ const modalState = useState('modalState', () => ({
   open: false,
   data: {},
 }));
-const selectedColor = ref(null); // Holds the selected color object
+const selectedColor = ref(null);
 
 const productsState = useState('productsState');
+const featuredProductsState = useState('featuredProductsState');
 const isSearching = ref(false);
 const activeCategory = ref('');
 const searchedColor = useState('searchedColor', () => '');
@@ -30,6 +31,12 @@ const searchedColor = useState('searchedColor', () => '');
 watchEffect(() => {
   if (!route.query.search && dataProds.value?.products?.length) {
     productsState.value = dataProds.value.products;
+  }
+});
+
+watchEffect(() => {
+  if (dataFeatured.value?.features?.length) {
+    featuredProductsState.value = dataFeatured.value;
   }
 });
 
@@ -64,7 +71,7 @@ watch(
 );
 
 const featuredProducts = computed(() => {
-  const featuredList = dataFeatured.value?.features[0]?.products || [];
+  const featuredList = featuredProductsState.value?.features[0]?.products || [];
   const featuredCode = featuredList.map(({ productCode }) => productCode);
   const productMap = new Map((dataProds.value?.products || []).map((prod) => [prod.productCode, prod]));
 
@@ -72,7 +79,7 @@ const featuredProducts = computed(() => {
 });
 
 const featuredTitle = computed(() => {
-  return locale.value == 'fr' ? dataFeatured.value?.features[0].nameFR : dataFeatured.value?.features[0].name;
+  return locale.value == 'fr' ? featuredProductsState.value?.features[0].nameFR : featuredProductsState.value?.features[0].name;
 });
 
 const filteredGroupedProducts = computed(() => {
@@ -132,7 +139,7 @@ useHead({
 <template>
   <div class="relative">
     <ClientOnly>
-      <div class="top-0 z-50 sm:sticky">
+      <div class="top-0 z-40 sm:sticky">
         <Cart />
         <AppFilter :products="productsState" :activeCategory="activeCategory" @update:filter="handleFilterUpdate" />
       </div>

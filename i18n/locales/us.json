@@ -183,5 +183,6 @@
     "majorUpdateAvailable": "Major update installed!",
     "newFeaturesAvailable": "New features available!",
     "appUpdated": "App updated successfully!"
-  }
+  },
+  "uploadNote": "*Note: When uploading AI, EPS, PDF, or similar files, please ensure the content is properly vectorized to avoid conversion issues."
 }

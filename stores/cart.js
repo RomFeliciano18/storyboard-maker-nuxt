@@ -250,7 +250,7 @@ export const useCart = defineStore(
     };
 
     return {
-      products, // ✅ exposed at top level
+      products,
       add,
       remove,
       removeAll,
