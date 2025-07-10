@@ -3,7 +3,7 @@ export const useCart = defineStore(
   () => {
     const productsState = useState('productsState');
     const modalState = useState('modalState');
-    let comboCounter = 1;
+    const comboCounter = ref(1);
 
     const products = ref([]);
 
@@ -31,7 +31,7 @@ export const useCart = defineStore(
       const isNotebook = type === 'notebook' && hasComponent;
       const isGiftset = type === 'giftset' && hasComponent;
 
-      const comboIndex = comboCounter;
+      const comboIndex = comboCounter.value;
       const kitId =
         isNotebook || isGiftset ? `${productCode}-${comboIndex}` : 'none';
 
@@ -107,7 +107,7 @@ export const useCart = defineStore(
                 });
 
                 modalState.value = { open: false, data: {} };
-                comboCounter++;
+                comboCounter.value++;
                 console.log('ITEMS IN CART: ', products.value);
                 resolve();
               },
@@ -194,7 +194,7 @@ export const useCart = defineStore(
         });
       }
 
-      comboCounter++;
+      comboCounter.value++;
       console.log('ITEMS IN CART: ', products.value);
     };
 
@@ -219,7 +219,7 @@ export const useCart = defineStore(
 
     const removeAll = () => {
       products.value.splice(0);
-      comboCounter = 1;
+      comboCounter.value = 1;
     };
 
     const isComboDuplicate = (mainCode, mainColor, componentList) => {
@@ -251,6 +251,7 @@ export const useCart = defineStore(
 
     return {
       products,
+      comboCounter,
       add,
       remove,
       removeAll,
@@ -260,7 +261,7 @@ export const useCart = defineStore(
   {
     persist: {
       storage: piniaPluginPersistedstate.localStorage(),
-      paths: ['products'],
+      paths: ['products', 'comboCounter'],
     },
   }
 );
