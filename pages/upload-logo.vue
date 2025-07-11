@@ -92,27 +92,27 @@ useHead({
           <!-- <template v-if="true"> -->
           <div class="flex h-full w-full items-center justify-evenly gap-2">
             <div class="flex flex-col gap-1">
-              <p class="mb-2 font-bold">Original Image:</p>
+              <p class="mb-2 font-bold">{{ $t('Home.originalImage') }}:</p>
               <div class="preview-image-background flex min-h-24 items-center justify-center 2xl:max-h-96">
                 <img :src="processLogo.original" alt="Preview" class="max-h-40 rounded 2xl:max-w-72" />
               </div>
             </div>
             <div class="flex flex-col gap-1">
-              <p class="mb-2 font-bold">1-Color Conversion:</p>
+              <p class="mb-2 font-bold">{{ $t('Home.1-color') }}:</p>
               <div class="preview-image-background flex min-h-24 items-center justify-center 2xl:max-h-96">
                 <img :src="processLogo.original" alt="Preview" class="max-h-40 rounded brightness-0 2xl:max-w-72" />
               </div>
             </div>
           </div>
-          <p>Logo Shape: {{ capitalize(processLogo.shape) }}</p>
+          <p>{{ $t('Home.logoShape') }}: {{ capitalize(processLogo.shape) }}</p>
         </template>
       </div>
 
       <input type="file" ref="inputRef" accept="image/jpeg, image/png, image/svg+xml, application/pdf, application/postscript" class="hidden" @change="onFileInputChange" />
 
       <div class="absolute -bottom-40 flex flex-row items-center justify-center gap-4 pb-6 sm:-right-44 sm:bottom-auto sm:h-full sm:flex-col sm:pb-0">
-        <MainButton class="w-40 sm:h-20 sm:w-52">Next</MainButton>
-        <MainButton variant="secondary" @click="$router.push(`/${locale}`)" class="w-40 sm:h-20 sm:w-52">Back</MainButton>
+        <MainButton class="w-40 sm:h-20 sm:w-52">{{ $t('Home.next') }}</MainButton>
+        <MainButton variant="secondary" @click="$router.push(`/${locale}`)" class="w-40 sm:h-20 sm:w-52">{{ $t('Home.back') }}</MainButton>
       </div>
     </div>
 
